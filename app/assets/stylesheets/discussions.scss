@@ -1,0 +1,22 @@
+// Place all the styles related to the Discussions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.hidden>div {
+	display:none;
+}
+
+.visible>div {
+	display:block;
+}
+
+#upbutton {
+    position: fixed;
+    bottom: 35px;
+    right: 0px; 
+}
+
+#downbutton {
+    position: fixed;
+    bottom: 0px;
+    right: 0px; 
+}

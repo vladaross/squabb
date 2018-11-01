@@ -1,0 +1,30 @@
+<div class="column is-3 is-offset-1">
+  <h3 class="title is-5 has-text-grey-light">Categories</h3>
+
+  <ul class="list">
+   <% @categories = Category.all %>
+   <% @categories.each do |c| %>
+    <li><%= link_to c.title, c %>
+    <% if has_role?(:admin) %>
+    <%= link_to edit_category_path(c) do %>
+    <span class="icon is-small">
+      <i class="fa fa fa-edit" aria-hidden="true"></i>
+    </span>
+    <% end %> 
+    <%= link_to c, method: :delete, data: { confirm: 'Are you sure?' } do %>
+    <span class="icon is-small">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+    </span>
+    <% end %>
+    <% end %>
+    </li>
+    <% end %>
+  </ul>
+
+  <br/>
+
+  <% if has_role?(:admin) %>
+  <%= link_to 'New Category', new_category_path, class:'button is-success' %>
+  <% end %>
+
+</div>

@@ -1,0 +1,173 @@
+<article class="media">
+  <figure class="media-left">
+    <p class="image is-48x48">
+      <%= image_tag(argument.user.avatar.url(:thumb), class: 'border-radius-50', size: 48, alt: argument.user.username) %>
+    </p>
+  </figure>
+  <% if argument.user.side(argument.discussion.id) == 'left' %>
+  <div class="media-content">
+    <div class="content">
+      <article class="message is-link">
+        <div class="message-body">
+        <p>
+        <strong><%= argument.user.username %></strong> <small>posted <%= time_ago_in_words(argument.created_at) %> ago</small>
+        <br>
+        <div class="overflow-wrap">
+        <%= argument.content %>
+        </div>
+      </p>
+      </div>
+     </article>
+     <nav class="level is-mobile">
+        <div class="level-left">
+          <a class="level-item" aria-label="like">
+            <%= link_to like_vote_path(item_id: argument.id, item_type: 'Argument') do %>
+            <span class="icon is-small">
+              <i class="fa fa-thumbs-up" aria-hidden="true"><%= VotesWorker.get_likes(argument.id, 'Argument') %></i>
+            </span>
+            <% end %>
+          </a>
+          <a class="level-item" aria-label="dislike">
+            <%= link_to dislike_vote_path(item_id: argument.id, item_type: 'Argument') do %>
+            <span class="icon is-small">
+              <i class="fa fa-thumbs-down" aria-hidden="true"><%= VotesWorker.get_dislikes(argument.id, 'Argument') %></i>  
+            </span>
+            <% end %>
+          </a>
+          <% if user_signed_in? %>
+            <% if EditPolicy.argument_can_be_edited?(argument, current_user) %>
+              <a class="level-item" aria-label="edit">
+            <%= link_to edit_argument_path(argument_id: argument) do %>
+            <span class="icon is-small">
+              <i class="fa fa-edit" is-info></i>
+            </span>
+            <% end %>
+            </a>
+            <% end %>
+          <% if has_role?(:admin) %>
+          <a id="tbl" class="level-item" aria-label="delete">
+          <%= link_to argument, method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <span class="icon is-small">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </span>
+            <% end %>
+          </a>
+          <% end %>
+          &nbsp;&nbsp;
+          <% if DiscussionsMembersWorker.record_already_exist?(argument.discussion, current_user) %>
+              <a class="level-item" aria-label="reply">
+                <span class="icon is-small">
+                <i class="fa fa-reply open-modal" aria-hidden="true" data-modal-id="#my-modal<%= argument.id %>"></i>
+                </span>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </nav>
+    </div>
+    <% end %>
+
+  <% if argument.user.side(argument.discussion.id) == 'right' %>
+  <div class="media-content">
+    <div class="content">
+      <article class="message is-danger">
+        <div class="message-body">
+        <p>
+        <strong><%= argument.user.username %></strong> <small>posted <%= time_ago_in_words(argument.created_at) %> ago</small>
+        <br>
+        <div class="overflow-wrap">
+        <%= argument.content %>
+        </div>
+      </p>
+      </div>
+     </article>
+     <nav class="level is-mobile">
+        <div class="level-left">
+          <a class="level-item" aria-label="like">
+            <%= link_to like_vote_path(item_id: argument.id, item_type: 'Argument') do %>
+            <span class="icon is-small">
+              <i class="fa fa-thumbs-up" aria-hidden="true" style="color:red"><%= VotesWorker.get_likes(argument.id, 'Argument') %></i>
+            </span>
+            <% end %>
+          </a>
+          <a class="level-item" aria-label="dislike">
+            <%= link_to dislike_vote_path(item_id: argument.id, item_type: 'Argument') do %>
+            <span class="icon is-small">
+              <i class="fa fa-thumbs-down" aria-hidden="true" style="color:red"><%= VotesWorker.get_dislikes(argument.id, 'Argument') %></i>
+            </span>
+            <% end %>
+          </a>
+          <% if user_signed_in? %>
+            <% if EditPolicy.argument_can_be_edited?(argument, current_user) %>
+              <a class="level-item" aria-label="edit">
+            <%= link_to edit_argument_path(argument_id: argument) do %>
+            <span class="icon is-small">
+              <i class="fa fa-edit" is-info style="color:red"></i>
+            </span>
+            <% end %>
+            </a>
+          <% end %>
+          <% if has_role?(:admin) %>
+          <a id="tbl" class="level-item" aria-label="delete">
+          <%= link_to argument, method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <span class="icon is-small">
+              <i class="fa fa-trash-o" aria-hidden="true" style="color:red"></i>
+            </span>
+            <% end %>
+          </a>
+          <% end %>
+          &nbsp;&nbsp;
+          <% if DiscussionsMembersWorker.record_already_exist?(argument.discussion, current_user) %>
+              <a class="level-item" aria-label="reply">
+                <span class="icon is-small">
+                <i class="fa fa-reply open-modal" aria-hidden="true" style="color:red" data-modal-id="#my-modal<%= argument.id %>"></i>
+                </span>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </nav>
+    </div>
+    <% end %>
+   <div class="text_container">
+    <% unless argument.replies.count.zero? %>
+    <a class="button is-fullwidth"><%= argument.replies.count %> replies</a>
+    </br>
+    <% end %>
+    <div class="blurb" >
+    <% argument.replies.each do |reply| %>
+    <%= render 'replies/reply', reply: reply %>
+    </br>
+    <% end %>
+    <% if user_signed_in? %>
+      <% if DiscussionsMembersWorker.record_already_exist?(argument.discussion, current_user) %>
+        <% @argument_id = argument.id %>
+        <%= render 'replies/form', reply: Reply.new %>  
+        </br>
+      <% end %>
+    <% end %>
+    </div>
+  </div>
+</article>
+    <div aria-hidden="" class="modal" id="my-modal<%= argument.id %>">
+      <div class="modal-background close-modal" data-modal-id="#my-modal<%= argument.id %>"></div>
+        <div class="modal-content">
+         <% if user_signed_in? %>
+           <% @argument_id = argument.id %>
+           <%= render 'replies/form', reply: Reply.new %>
+         <% end %>
+        </div>
+    <button aria-label="close" class="delete close-modal" data-modal-id="#my-modal<%= argument.id %>"></button>
+</div>
+<div class="buttons">
+<a href="#bottom" id="downbutton">
+    <span class="icon">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+</a>
+<a href="#head" id="upbutton">
+    <span class="icon">
+      <i class="fa fa-chevron-up"></i>
+    </span>
+</a>
+</div>

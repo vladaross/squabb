@@ -1,0 +1,23 @@
+= form_with(model: discussion, local: true) do |form|
+  - if discussion.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(discussion.errors.count, "error")
+        prohibited this discussion from being saved:
+      %ul
+        - category.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = form.label :question
+    = form.text_field :question
+  .field
+    = form.label :left_side
+    = form.text_field :left_side
+  .field
+    = form.label :right_side
+    = form.text_field :right_side
+  .field
+    = form.label :category_id
+    = form.text_field :category_id
+  .actions
+    = form.submit

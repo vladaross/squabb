@@ -1,0 +1,118 @@
+  <article class="media">
+    <div class="media-left">
+      <figure class="image is-48x48">
+        <%= image_tag(reply.user.avatar.url(:thumb), class: 'border-radius-50', size: 48, alt: reply.user.username) %>
+      </figure>
+    </div>
+    <% if reply.user.side(reply.argument.discussion.id) == 'left' %>
+    <div class="media-content">
+      <div class="content">
+        <article class="message is-link">
+        <div class="message-body">
+        <p>
+          <strong><%= reply.user.username %></strong> <small>posted <%= time_ago_in_words(reply.created_at) %> ago</small>
+          <br>
+          <div class="overflow-wrap">
+          <%= reply.content %>
+          </div>
+        </p>
+       </div>
+       </article>
+        </div>
+       <nav class="level is-mobile">
+        <div class="level-left">
+         <a class="level-item" aria-label="like">
+            <%= link_to like_vote_path(item_id: reply.id, item_type: 'Reply') do %>
+            <span class="icon is-small">
+              <i class="fa fa-thumbs-up" aria-hidden="true"><%= VotesWorker.get_likes(reply.id, 'Reply') %></i>
+            </span>
+            <% end %>
+          </a>
+          <a class="level-item" aria-label="dislike">
+            <%= link_to dislike_vote_path(item_id: reply.id, item_type: 'Reply') do %>
+            <span class="icon is-small">
+              <i class="fa fa-thumbs-down" aria-hidden="true"><%= VotesWorker.get_dislikes(reply.id, 'Reply') %></i>
+            </span>
+            <% end %>
+          </a>
+          <% if user_signed_in? %>          
+            <% if EditPolicy.reply_can_be_edited?(reply, current_user) %>
+            <a class="level-item" aria-label="edit">
+            <%= link_to edit_reply_path(reply_id: reply) do %>
+            <span class="icon is-small">
+              <i class="fa fa-edit" aria-hidden="true"></i>
+            </span>
+            <% end %>
+            </a>
+            <% end %>
+            <% if has_role?(:admin) %>
+            <a class="level-item" aria-label="delete">
+          <%= link_to reply, method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <span class="icon is-small">
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
+            </span>
+            <% end %>
+            <% end %>
+          </a>
+          <% end %>
+        </div>
+      </nav>
+    </div>
+    <% end %>
+
+    <% if reply.user.side(reply.argument.discussion.id) == 'right' %>
+    <div class="media-content">
+      <div class="content">
+        <article class="message is-danger">
+        <div class="message-body">
+        <p>
+          <strong><%= reply.user.username %></strong> <small>posted <%= time_ago_in_words(reply.created_at) %> ago</small>
+          <br>
+          <div class="overflow-wrap">
+          <%= reply.content %>
+          </div>
+        </p>
+       </div>
+       </article>
+      </div>
+       <nav class="level is-mobile">
+        <div class="level-left">
+         <a class="level-item" aria-label="like">
+            <%= link_to like_vote_path(item_id: reply.id, item_type: 'Reply') do %>
+            <span class="icon is-small">
+              <i class="fa fa-thumbs-up" aria-hidden="true" style="color:red"><%= VotesWorker.get_likes(reply.id, 'Reply') %></i>
+            </span>
+            <% end %>
+          </a>
+          <a class="level-item" aria-label="dislike">
+            <%= link_to dislike_vote_path(item_id: reply.id, item_type: 'Reply') do %>
+            <span class="icon is-small">
+              <i class="fa fa-thumbs-down" aria-hidden="true" style="color:red"></i>
+            </span>
+            <% end %>
+          </a>
+          <% if user_signed_in? %>          
+            <% if EditPolicy.reply_can_be_edited?(reply, current_user) %>
+            <a class="level-item" aria-label="edit">
+            <%= link_to edit_reply_path(reply_id: reply) do %>
+            <span class="icon is-small">
+              <i class="fa fa-edit" aria-hidden="true" style="color:red"><%= VotesWorker.get_dislikes(reply.id, 'Reply') %></i>
+            </span>
+            <% end %>
+            </a>
+            <% end %>
+            <% if has_role?(:admin) %>
+            <a class="level-item" aria-label="delete">
+          <%= link_to reply, method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <span class="icon is-small">
+              <i class="fa fa-trash-o" aria-hidden="true" style="color:red"></i>
+            </span>
+            <% end %>
+            <% end %>
+          </a>
+          <% end %>
+        </div>
+      </nav>
+    </div>
+    <% end %>
+  </article>

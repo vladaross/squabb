@@ -1,0 +1,34 @@
+  </br>
+  <div class="discussions">
+    <% @discussions.each do |discussion| %>     
+      <div class="columns bb-not-last pv10">
+        <div class="column is-1">
+            <%= image_tag(discussion.user.avatar.url(:thumb), class:'border-radius-50', size: 48, alt: discussion.user.username) %>
+        </div>
+        <div class="column is-8">
+          <%= link_to discussion do %>
+            <h3 class="title is-5 "><span class="has-text-link"><%= discussion.left_side %></span> <span class="has-text-grey">vs</span> <span class="has-text-danger"><%= discussion.right_side %></span></h3>
+          <% end %>
+          <div class="content">
+            <%= truncate(discussion.question, length: 140) %>
+            <p><em><small>Posted <%= time_ago_in_words(discussion.created_at) %> ago in
+              <% if discussion.category %>
+                <%= link_to discussion.category.title, discussion.category %>
+              <% end %>
+              by <%= discussion.user.username %>
+              </small>
+              </em>
+            </p>
+          </div>
+        </div>
+
+        <% if EditPolicy.discussion_can_be_edited?(discussion, current_user) || has_role?(:admin) %>
+        <div class="column has-text-right">
+          <%= link_to 'Edit', edit_discussion_path(discussion), class:'button is-link' %>
+          <%= link_to 'Delete', discussion, method: :delete, data: { confirm: 'Are you sure?' }, class: "button is-danger" %>
+        </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

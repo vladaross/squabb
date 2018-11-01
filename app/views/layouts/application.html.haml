@@ -1,0 +1,74 @@
+<<<<<<< HEAD
+!!!
+=======
+>>>>>>> 60dc792aa515d82ba75d1d2717be8fc213dd43e7
+%html
+  %head
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Discussions
+    = csrf_meta_tags
+    %meta{content: "width=device-width, initial-scale=1", name: "viewport"}/
+    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    %body
+    - if flash[:notice]
+      .notification.is-success.global-notification
+        %p.notice= notice
+    - if flash[:alert]
+      .notification.is-danger.global-notification
+        %p.alert= alert
+<<<<<<< HEAD
+    %nav.navbar.is-light{"aria-label" => "main navigation", role: "navigation"}
+      .navbar-brand
+        = link_to root_path, class:"menu_icon" do
+          = image_tag("/assets/11.png", class: "menu_icon")
+      .navbar-item
+        - if user_signed_in?
+          .navbar-item.has-dropdown.is-hoverable
+          = link_to 'Profile', edit_user_registration_path, class: "navbar-link"
+          .field.is-grouped
+          = link_to 'Log out', destroy_user_session_path,method: :delete, class:"button"
+        - else
+          %navbar-item
+            .field.is-grouped
+              %p.control
+                = link_to 'New Discussion', new_discussion_path, class:"button is-info"
+              %p.control
+                = link_to "Sign In", new_user_session_path, class: "button is-light"
+              %p.control
+                = link_to "Sign up", new_user_registration_path, class: "button is-light"
+=======
+
+  #navbar.navbar-menu
+    %nav.navbar.is-light{"aria-label" => "main navigation", role: "navigation"}
+    .navbar-brand
+      = link_to root_path, class:"menu_icon" do
+        = image_tag("/assets/11.png", class: "menu_icon")
+    .navbar-brand
+      = link_to root_path, class:"navbar-item" do
+        = image_tag("/assets/11.png", class: "navbar-item")
+    .navbar-end
+      - if user_signed_in?
+        .navbar-item
+          .navbar-item.has-dropdown.is-hoverable
+          = link_to 'Profile', edit_user_registration_path, class: "navbar-link"
+          .navbar-dropdown.is-right
+            = link_to current_user.username, edit_user_registration_path, class:"navbar-item"
+            = link_to "Sign Out", cancel_user_registration_path, method: :delete, class:"navbar-item"
+          .field.is-grouped
+            = link_to 'Log out', destroy_user_session_path, class:"button"
+
+      - else
+        .navbar-item
+          .field.is-grouped
+            %p.control
+              = link_to 'New Discussion', new_discussion_path, class:"button is-info"
+            %p.control
+              = link_to "Sign In", new_user_session_path, class: "button is-light"
+            %p.control
+              = link_to "Sign up", new_user_registration_path, class: "button is-light"
+>>>>>>> 60dc792aa515d82ba75d1d2717be8fc213dd43e7
+  %section.section
+    .container
+      = yield

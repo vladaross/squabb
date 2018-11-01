@@ -1,0 +1,25 @@
+<article class="media">
+  <figure class="media-left">
+    <%= simple_form_for(argument) do |f| %>
+    <%= f.hidden_field :discussion_id, value: @discussion.id %>
+    <p class="image is-64x64">
+      <%= image_tag(current_user.avatar.url(:thumb), class: 'border-radius-50', size: 48, alt: current_user.username) %>
+    </p>
+  </figure>
+  <div class="media-content">
+    <div class="field">
+      <p class="control">
+        <%= f.input :content, input_html: { class: 'textarea', rows: '5', placeholder: "Add some text..."}, wrapper: false, label_html: { class: 'label' }, label: false %>
+      </p>
+    </div>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <%= f.button :submit, class:'button is-success is-active' %>
+        </div>
+      </div>
+    </nav>
+  </div>
+<% end %>
+</article>
+

@@ -1,0 +1,58 @@
+<div class="columns">
+<div class="column is-narrow">
+<div style="width: 300px;">
+<div class="level-item has-text-centered">
+  <div class="card">
+  <div class="card-image">
+    <figure class="">
+    <%= image_tag(@user.avatar.url(:medium), class: 'profile_pic') %>
+    </figure>
+  </div>
+  <div class="card-content">
+    <div class="media">
+      <div class="media-content has-text-centered">
+        <p class="title is-4">Hello, <%= @user.username%>!</p>
+      </div>
+    </div>
+
+    <div class="level-item has-text-centered">  
+  <p class="username">
+   You are with us for <span class="has-text-danger"><%= distance_of_time_in_words_to_now(@user.created_at) %></span>
+  </p> 
+ </div>
+ <div class="level-item has-text-centered">
+  <p class="dcount">
+    Discussions created: <span class="has-text-link"><%= @discussions.count %></span>
+</p>
+</div>
+<div class="level-item has-text-centered">
+  <p class="dcount">
+    Arguments : <span class="has-text-link"><%= @arguments.count %></span>
+</p>
+</div>
+<div class="level-item has-text-centered">
+  <p class="dcount">
+    Replies : <span class="has-text-danger"><%= @replies.count %></span>
+</p>
+</div>
+</br>
+<div class="level-item has-text-centered">
+<p class="button">
+  <%= link_to 'Edit Profile', edit_user_registration_path  %>
+</p>
+</div>
+</br>
+  </div>
+</div>
+</div>
+</div>
+</div>
+<div class="column is-8">
+  <h3 class="title is-5 has-text-grey-light">Discussions made by you</h3>
+  <% if @discussions.empty? %>
+  <p> You didn't create any discussion yet</p>
+  <% end %>  
+  <div>
+  <%= render 'shared/discussions'%>
+  <%= paginate @discussions %>
+</div>

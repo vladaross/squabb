@@ -1,0 +1,10 @@
+<h1 class="title">New Category</h1>
+<br/>
+<% if has_role?(:admin) %>
+<%= render 'form', category: @category %>
+<% else %>
+ <p class="has text center">You don't have permission to create new category!</p>
+<% end %>
+<br/>
+
+<%= link_to 'Back', discussions_path %>

@@ -1,0 +1,55 @@
+<div class="columns">
+  <div class="column is-8">
+  <h3 class="title is-5 has-text-grey-light">Latest from <strong><%= Discussion.count %></strong> discussions</h3>
+  <div class="tabs is-centered">
+  <ul>
+    <li class="is-active"><a>Latest</a></li>
+    <li><%= link_to "Popular", popular_discussions_path%></li>
+    <li><%= link_to "Most Upvoted", most_upvoted_discussions_path%></li>
+  </ul>
+</div>
+  <%= render 'discussions/search_form' %>
+  <%= render 'shared/discussions'%>
+  <%= render 'sidebar' %>
+</div>
+<nav class="column is-8">
+  <%= paginate @discussions %>
+</nav>
+<!-- <nav class="pagination" role="navigation" aria-label="pagination">
+  <%= paginate @discussions %>
+</nav> -->
+<!-- <nav class="pagination-previous" role="navigation" aria-label="pagination">
+  <%= link_to_previous_page @discussions, 'Previous Page' %>
+</nav>
+
+<nav class="pagination-next" role="navigation" aria-label="pagination">
+<%= link_to_next_page @discussions, 'Next Page' %>
+</nav> -->
+
+<!-- <nav class="pagination" role="navigation" aria-label="pagination">
+  <a class="pagination-previous">Previous</a>
+  <a class="pagination-next">Next page</a>
+  <ul class="pagination-list">
+    <li>
+      <a class="pagination-link" aria-label="Goto page 1">1</a>
+    </li>
+    <li>
+      <span class="pagination-ellipsis">&hellip;</span>
+    </li>
+    <li>
+      <a class="pagination-link" aria-label="Goto page 45">45</a>
+    </li>
+    <li>
+      <a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a>
+    </li>
+    <li>
+      <a class="pagination-link" aria-label="Goto page 47">47</a>
+    </li>
+    <li>
+      <span class="pagination-ellipsis">&hellip;</span>
+    </li>
+    <li>
+      <a class="pagination-link" aria-label="Goto page 86">86</a>
+    </li>
+  </ul>
+</nav> -->

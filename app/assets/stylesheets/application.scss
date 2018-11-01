@@ -1,0 +1,105 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ *= require font-awesome
+ */
+
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display');
+
+// Set your brand colors
+$pink: #ee5d57;
+$blue: #4285f4;
+$red: #e85a4f;
+$yellow: #feb545;
+$purple: #d1a38a;
+$brown: #757763;
+$beige-light: #D0D1CD;
+$beige-lighter: #EFF0EB;
+$beige: #eae7dc;
+$dark-blue: #263340;
+$air: #84cfed;
+
+// Update Bulma's global variables
+$family-sans-serif: "Poppins", sans-serif;
+$grey-light: $red;
+$primary: $dark-blue;
+$link: $blue;
+$danger: $red;
+
+// Update some of Bulma's component variables
+$control-border-width: 2px;
+$input-background-color: $beige-lighter;
+$body-background-color: $beige;
+$input-border-color: transparent;
+$input-shadow: none;
+$progress-bar-background-color: $red;
+
+// Import the rest of Bulma
+@import "bulma";
+@import "functions";
+
+
+
+.notification:not(:last-child) {
+  margin-bottom: 0;
+}
+
+
+
+.discussion-title {
+  margin-bottom: 0;
+  height: 300px;
+
+}
+
+
+.image {
+  border-radius: 50%;
+  img {
+    border-radius: 50%;
+  }
+}
+
+.navbar {
+  height: 90px;
+}
+
+.button {
+  background-color: #dc143c;
+  color: #fff;
+  padding: 21px 28px;
+  border-radius: 25px;
+  margin-right: 30px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.discussion-title {
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 0;
+}
+
+.overflow-wrap {
+  white-space: pre-line;
+  width: 20em;
+  overflow-wrap: break-word;
+}
+
+.red-to-blue {
+  background: linear-gradient(to right, $red, $blue);
+  background-image: linear-gradient(to right, $red, $blue);
+}

@@ -1,0 +1,146 @@
+    <section class="hero">
+    <div class="hero-body">
+    <nav class="level is-mobile">
+    <div class="level-item has-text-centered" id="head">
+         <div class="control">
+    <div class="tags has-addons">
+      <span class="tag is-large"><%= link_to @discussion.left_side, { :controller => "discussions", :action => "vote", :side => "left" }, class: "title is-3 has-text-link", method: :post %></span>
+      <span class="tag is-link is-large"><%= DiscussionsMembersWorker.count_users_by_side(@discussion.id, "left") %></span>
+    </div>
+  </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div class="control">
+        <span class="tag is-large has-background-grey"><h1 class="title is-3 has-text-white">VS</h1></span>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div class="control">
+    <div class="tags has-addons">
+      <span class="tag is-danger is-large"><%= DiscussionsMembersWorker.count_users_by_side(@discussion.id, "right") %></span>
+      <span class="tag  is-large"><%= link_to @discussion.right_side, { :controller => "discussions", :action => "vote", :side => "right" }, class: "title is-3 has-text-danger", method: :post %></span>
+    </div>
+  </div>
+      <div>
+      </div>
+    </div>
+  </nav>
+  </div>
+</section>
+    <div class="level">
+      <div class="level-left">
+        <div class="subtitle is-4 has-text-centered"><%= @discussion.question %></div>
+      </div>
+    </div>
+    <div class="level">
+      <div class="level-left">
+        <h3 class="subtitle is-5 has-text-grey">created by <%= @discussion.user.username %> in <%= link_to @discussion.category.title, @discussion.category %></h3>
+      </div>
+      <div class="level-right">
+        <div class="buttons">
+          <% if DiscussionsMembersWorker.record_already_exist?(@discussion, current_user) %>
+          <a class="button is-primary">
+          <span class="open-modal" data-modal-id="#my-modal<%= @discussion.id %>">Leave argument</span>
+          </span>
+          </a>
+        <% end %>
+          <% if EditPolicy.discussion_can_be_edited?(@discussion, current_user) || has_role?(:admin) %>
+            <%= link_to 'Edit Discussion', edit_discussion_path(@discussion), class:'button is-link'%>
+            <%= link_to 'Delete', discussion_path(@discussion), method: :delete, data: { confirm: "Delete discussion?" }, class:'button is-danger' %>
+        <% end %>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <nav class="level">
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Arguments</p>
+        <p class="title"><%= @discussion.arguments.count %></p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Upvotes</p>
+        <p class="title">
+          <% if !VotesWorker.get_likes(@discussion.id, 'Discussion') %>
+          <%= 0 %>
+          <% else %>
+          <%= VotesWorker.get_likes(@discussion.id, 'Discussion') %>
+          <% end %>
+          <%= link_to like_vote_path(item_id: @discussion.id, item_type: 'Discussion') do %>
+            <span class="icon is-small">
+              <i class="fa fa-arrow-up" aria-hidden="true"></i>
+            </span>
+          <% end %>
+        </p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="heading">Downvotes</p>
+        <p class="title">
+          <% if !VotesWorker.get_dislikes(@discussion.id, 'Discussion') %>
+          <%= 0 %>
+          <% else %>
+          <%= VotesWorker.get_dislikes(@discussion.id, 'Discussion') %>
+          <% end %>
+          <%= link_to dislike_vote_path(item_id: @discussion.id, item_type: 'Discussion') do %>
+            <span class="icon is-small">
+              <i class="fa fa-arrow-down" aria-hidden="true" style="color:red"></i>
+            </span>
+          <% end %>
+        </p>
+      </div>
+    </div>
+  </nav>
+  <hr />
+  <div class="columns">
+  <div class="column is-half">
+  <div id="discussion-replies">
+     <% @discussion.arguments.each do |argument| %>
+     <% if argument.user.side(@discussion.id) == 'left' %>
+     <%= render argument %>
+     <% end %>
+     <% end %>
+  </div>
+  </div>
+  <div class="column is-half">
+	<div id="discussion-replies">
+     <% @discussion.arguments.each do |argument| %>
+     <% if argument.user.side(@discussion.id) == 'right' %>
+     <%= render argument %>
+     <% end %>
+     <% end %>
+	</div>
+  </div>
+  </div>
+    <div id="bottom">
+    <h3 class="subtitle is-3 has-text-grey">Leave a argument</h3>
+    <% if user_signed_in? %>
+     <% if DiscussionsMembersWorker.record_already_exist?(@discussion, current_user) %>
+      <%= render 'arguments/form', argument: Argument.new, discussion: @discussion, user: current_user %>
+    <% else %>
+      <p >First you need to vote</p>
+    <% end %>
+    <% else %>
+    <p>To leave argument you need to <%= link_to 'login', new_user_session_path %>. Don't have an account?
+      <%= link_to 'Sign up', new_user_registration_path %> for one.</p>
+    <% end %>
+  </div>
+    <div aria-hidden="" class="modal" id="my-modal<%= @discussion.id %>">
+      <div class="modal-background close-modal" data-modal-id="#my-modal<%= @discussion.id %>"></div>
+        <div class="modal-content">
+         <% if user_signed_in? %>
+         <% if DiscussionsMembersWorker.record_already_exist?(@discussion, current_user) %>
+          <%= render 'arguments/form', argument: Argument.new, discussion: @discussion, user: current_user %>
+        <% else %>
+          <p >First you need to vote</p>
+        <% end %>
+        <% else %>
+        <p>To leave argument you need to <%= link_to 'login', new_user_session_path %>. Don't have an account?
+          <%= link_to 'Sign up', new_user_registration_path %> for one.</p>
+        <% end %>
+        </div>
+        <button aria-label="close" class="delete close-modal" data-modal-id="#my-modal<%= @discussion.id %>"></button>
+    </div>

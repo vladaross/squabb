@@ -1,0 +1,48 @@
+<div class="columns is-centered">
+<div class="column is-narrow">
+<div style="width: 300px;">
+<div class="card">
+  <div class="card-content">
+    <div class="media">
+      <div class="media-content has-text-centered">
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<div class="level-item has-text-centered">
+  <div class="field">
+    <%= f.label :login %><br />
+    <%= f.text_field :login, autofocus: true, autocomplete: "login", class: 'input' %>
+  </div>
+</div>
+</br>
+<div class="level-item has-text-centered">
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password, autocomplete: "off", class: 'input' %>
+  </div>
+</div>
+</br>
+<div class="level-item has-text-centered">
+  <% if devise_mapping.rememberable? -%>
+    <div class="field">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me %>
+    </div>
+  <% end %>
+</div>
+</br>
+<div class="level-item has-text-centered">
+  <div class="actions">
+    <%= f.submit "Log in", class:"button" %>
+  </div>
+<% end %>
+</div>
+
+
+</br>
+<%= render "devise/shared/links" %>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

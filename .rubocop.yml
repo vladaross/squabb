@@ -1,0 +1,22 @@
+AllCops:
+  TargetRubyVersion: 2.4.1
+  Exclude:
+    - config/**/*
+    - db/**/*
+    - bin/**/*
+
+Style/Documentation:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Naming:
+  Enabled: false
+
+Metrics/BlockLength:
+  ExcludedMethods: ['describe', 'context', 'it']
+

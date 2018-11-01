@@ -1,0 +1,17 @@
+<%= form_tag(search_discussions_path, :method => 'get') do %>
+  <nav class="level">
+  <!-- Left side -->
+  <div class="level-left">
+    <div class="level-item">
+      <div class="field has-addons">
+        <p class="control">
+         <%= text_field_tag :search, params[:search], class: 'input', type: 'text', placeholder: 'Find a discussion', wrapper: false %>
+        </p>
+        <p class="control">
+          <%= submit_tag "Search", :name => nil, class:"button" %>
+        </p>
+      </div>
+    </div>
+  </div>
+</nav>
+<% end %>
